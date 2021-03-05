@@ -40,14 +40,12 @@ RUN conda config --add channels conda-forge && \
     conda config --add channels pytorch && \
     conda config --add channels rapidsai && \
     # ^ rapidsai is the highest priority channel, default lowest, conda-forge 2nd lowest.
-    # b/182405233 pyproj 3.x is not compatible with basemap 1.2.1
     # b/161473620#comment7 pin required to prevent resolver from picking pysal 1.x., pysal 2.2.x is also downloading data on import.
-    conda install matplotlib basemap cartopy python-igraph imagemagick "pyproj=2.6" "pysal==2.1.0" && \
-    conda install "pytorch=1.7" "torchvision=0.8" "torchaudio=0.7" "torchtext=0.8" cpuonly && \
+    conda install basemap cartopy imagemagick pyproj pysal==2.1.0 && \
+    conda install "pytorch=1.8" "torchvision=0.9" "torchaudio=0.8" "torchtext=0.9" cpuonly && \
     /tmp/clean-layer.sh
 
-# The anaconda base image includes outdated versions of these packages. Update them to include the latest version.
-RUN pip install seaborn python-dateutil dask && \
+RUN pip install seaborn python-dateutil dask python-igraph && \
     pip install pyyaml joblib husl geopy ml_metrics mne pyshp && \
     pip install pandas && \
     # Install h2o from source.
@@ -346,8 +344,7 @@ RUN pip install bleach && \
     pip install widgetsnbextension && \
     pip install pyarrow && \
     pip install feather-format && \
-    # fastai >= 2.3.1 upgrades pytorch/torchvision. upgrade of pytorch will be handled in b/181966788
-    pip install fastai==2.2.7 && \
+    pip install fastai && \
     pip install allennlp && \
     # https://b.corp.google.com/issues/184685619#comment9: 3.9.0 is causing a major performance degradation with spacy 2.3.5
     pip install importlib-metadata==3.4.0 && \

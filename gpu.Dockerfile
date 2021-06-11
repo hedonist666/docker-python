@@ -100,8 +100,6 @@ RUN pip install /tmp/tfa_gpu/tensorflow*.whl && \
 RUN pip install pycuda && \
     pip install cupy-cuda$CUDA_MAJOR_VERSION$CUDA_MINOR_VERSION && \
     pip install pynvrtc && \
-    # b/190622765 latest version is causing issue. nnabla fixed it in https://github.com/sony/nnabla/issues/892, waiting for new release before we can remove this pin.
-    pip install pynvml==8.0.4 && \
     pip install nnabla-ext-cuda$CUDA_MAJOR_VERSION$CUDA_MINOR_VERSION && \
     /tmp/clean-layer.sh
 
@@ -109,5 +107,11 @@ RUN pip install pycuda && \
 # b/139212522 re-enable TensorBoard once solution for slowdown is implemented.
 # ADD patches/tensorboard/notebook.py /opt/conda/lib/python3.7/site-packages/tensorboard/notebook.py
 
+
 # Remove the CUDA stubs.
 ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH_NO_STUBS"
+
+ADD ./requirements.txt ./
+RUN pip install -r requirements.txt
+ADD ./fd_init.py ./
+RUN python fd_init.py

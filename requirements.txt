@@ -1,0 +1,1 @@
+face-detection @ git+https://github.com/hukkelas/DSFD-Pytorch-Inference.git@7bbe1f61ef5cb951a6e55e0a80e4972419edf5ca
